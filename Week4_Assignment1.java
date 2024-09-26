@@ -1,98 +1,40 @@
+/***
+ * Task: Java program to convert and perform mathematical operation on various number system.
+ * @author Uddeshya Patidar
+ * Date: 26/09/2024
+ */
 package practice.java;
-
-import java.util.ArrayList;
 
 import java.util.Scanner;
 
 public class Week4_Assignment1 {
-
-    // Decimal to Binary
-    public static String decimalToBinary(int decimal) {
-        String binary = "";
-        if (decimal == 0) {
-            return "0";
-        }
-        while (decimal > 0) {
-            binary = (decimal % 2) + binary;
-            decimal /= 2;
-        }
-        return binary;
-    }
-
-    // Decimal to Octal
-    public static String decimalToOctal(int decimal) {
-        String octal = "";
-        if (decimal == 0) {
-            return "0";
-        }
-        while (decimal > 0) {
-            octal = (decimal % 8) + octal;
-            decimal /= 8;
-        }
-        return octal;
-    }
-
-    // Decimal to Hexadecimal
-    public static String decimalToHexadecimal(int decimal) {
-        String hexadecimal = "";
-        if (decimal == 0) {
-            return "0";
-        }
-        char[] hexDigits = "0123456789ABCDEF".toCharArray();
-        while (decimal > 0) {
-            hexadecimal = hexDigits[decimal % 16] + hexadecimal;
-            decimal /= 16;
-        }
-        return hexadecimal;
-    }
-
-    // Binary to Decimal
-    public static int binaryToDecimal(String binary) {
-        return Integer.parseInt(binary, 2);
-    }
-
-    // Octal to Decimal
-    public static int octalToDecimal(String octal) {
-        return Integer.parseInt(octal, 8);
-    }
-
-    // Hexadecimal to Decimal
-    public static int hexadecimalToDecimal(String hexadecimal) {
-        return Integer.parseInt(hexadecimal, 16);
-    }
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         String runAgain = "y";
 
         while (runAgain.equalsIgnoreCase("y")) {
-
             try {
-                // Ask the user what they want to do: Convert or Perform Operation
-                System.out.println("What would you like to do?");
-                System.out.println("1. Convert a number between systems");
-                System.out.println("2. Perform an arithmetic operation (Addition/Subtraction)");
+                // Ask the user what they want to do
+                System.out.println(Constants.Welcome);
                 int action = scanner.nextInt();
 
                 if (action == 1) {
                     // Conversion block
-                    System.out.println("Enter the type of input number:");
-                    System.out.println("1. Decimal");
-                    System.out.println("2. Binary");
-                    System.out.println("3. Octal");
-                    System.out.println("4. Hexadecimal");
+                    System.out.println(Constants.ConversionIndex);
                     int inputType = scanner.nextInt();
 
                     if (inputType < 1 || inputType > 4) {
-                        System.out.println("Invalid input type. Please enter a number between 1 and 4.");
+                        System.out.println(Constants.InvalidConversionIndex);
                         continue;
                     }
 
-                    System.out.println("Enter the number to convert: ");
-                    String input = scanner.next(); // Taking input as String for non-decimal formats
+                    System.out.println(Constants.UserInput);
+                    String input = scanner.next(); 
 
-                    if (input.isEmpty()) {
-                        System.out.println("Input cannot be empty. Please enter a valid number.");
+                    // Check for valid input
+                    if (!methodConstant.isValidInput(input)) {
+                        System.out.println(Constants.ValibInputCheck);
                         continue;
                     }
 
@@ -104,22 +46,28 @@ public class Week4_Assignment1 {
                             decimalNumber = Integer.parseInt(input);
                             break;
                         case 2:
-                            decimalNumber = binaryToDecimal(input);
+                            decimalNumber = methodConstant.binaryToDecimal(input);
                             break;
                         case 3:
-                            decimalNumber = octalToDecimal(input);
+                            decimalNumber = methodConstant.octalToDecimal(input);
                             break;
                         case 4:
-                            decimalNumber = hexadecimalToDecimal(input);
+                            try {
+                                decimalNumber = methodConstant.hexadecimalToDecimal(input);
+                            } catch (NumberFormatException e) {
+                                System.out.println(e.getMessage());
+                                continue;
+                            }
                             break;
                     }
 
-                    // Ask the user for the desired conversion
-                    System.out.println("Convert the number to:");
-                    System.out.println("1. Decimal");
-                    System.out.println("2. Binary");
-                    System.out.println("3. Octal");
-                    System.out.println("4. Hexadecimal");
+                    // Check if the number is negative
+                    if (decimalNumber < 0) {
+                        System.out.println(Constants.NegtiveInput);
+                        continue; 
+                    }
+
+                    System.out.println(Constants.ReturnTypeIndex);
                     int conversionChoice = scanner.nextInt();
 
                     switch (conversionChoice) {
@@ -127,13 +75,13 @@ public class Week4_Assignment1 {
                             System.out.println("Decimal of " + input + " is: " + decimalNumber);
                             break;
                         case 2:
-                            System.out.println("Binary of " + decimalNumber + " is: " + decimalToBinary(decimalNumber));
+                            System.out.println("Binary of " + decimalNumber + " is: " + methodConstant.decimalToBinary(decimalNumber));
                             break;
                         case 3:
-                            System.out.println("Octal of " + decimalNumber + " is: " + decimalToOctal(decimalNumber));
+                            System.out.println("Octal of " + decimalNumber + " is: " + methodConstant.decimalToOctal(decimalNumber));
                             break;
                         case 4:
-                            System.out.println("Hexadecimal of " + decimalNumber + " is: " + decimalToHexadecimal(decimalNumber));
+                            System.out.println("Hexadecimal of " + decimalNumber + " is: " + methodConstant.decimalToHexadecimal(decimalNumber));
                             break;
                         default:
                             System.out.println("Invalid conversion choice.");
@@ -141,30 +89,29 @@ public class Week4_Assignment1 {
 
                 } else if (action == 2) {
                     // Arithmetic operation block
-                    System.out.println("Enter the type of input number:");
-                    System.out.println("1. Decimal");
-                    System.out.println("2. Binary");
-                    System.out.println("3. Octal");
-                    System.out.println("4. Hexadecimal");
+                    System.out.println(Constants.ArthemticOperationIndex);
                     int inputType = scanner.nextInt();
 
                     if (inputType < 1 || inputType > 4) {
-                        System.out.println("Invalid input type. Please enter a number between 1 and 4.");
+                        System.out.println(Constants.InvalidConversionIndex);
                         continue;
                     }
 
-                    // Enter multiple numbers
-                    ArrayList<Integer> decimalNumbers = new ArrayList<>();
-                    String input = "";
+                    int[] decimalNumbers = new int[100]; // Adjust size as needed
+                    int count = 0;
+
+                    String input;
                     while (true) {
-                        System.out.println("Enter a number (or type 'done' to finish): ");
+                        System.out.println(Constants.EnterNumber);
                         input = scanner.next();
+
                         if (input.equalsIgnoreCase("done")) {
                             break;
                         }
 
-                        if (input.isEmpty()) {
-                            System.out.println("Input cannot be empty. Please enter a valid number.");
+                        // Check for valid input
+                        if (!methodConstant.isValidInput(input)) {
+                            System.out.println(Constants.InvalidInput);
                             continue;
                         }
 
@@ -175,41 +122,50 @@ public class Week4_Assignment1 {
                                 decimalNumber = Integer.parseInt(input);
                                 break;
                             case 2:
-                                decimalNumber = binaryToDecimal(input);
+                                decimalNumber = methodConstant.binaryToDecimal(input);
                                 break;
                             case 3:
-                                decimalNumber = octalToDecimal(input);
+                                decimalNumber = methodConstant.octalToDecimal(input);
                                 break;
                             case 4:
-                                decimalNumber = hexadecimalToDecimal(input);
+                                try {
+                                    decimalNumber = methodConstant.hexadecimalToDecimal(input);
+                                } catch (NumberFormatException e) {
+                                    System.out.println(e.getMessage());
+                                    continue;
+                                }
                                 break;
                         }
-                        decimalNumbers.add(decimalNumber);
+
+                        // Check for negative numbers
+                        if (decimalNumber < 0) {
+                            System.out.println(Constants.InvalidInput);
+                            continue;
+                        }
+
+                        decimalNumbers[count++] = decimalNumber; // Store the number and increment count
                     }
 
                     // Ask the user for arithmetic operation
-                    System.out.println("What operation would you like to perform:");
-                    System.out.println("1. Addition");
-                    System.out.println("2. Subtraction");
+                    System.out.println(Constants.ArthemticOptions);
                     int operation = scanner.nextInt();
 
-                    int result = decimalNumbers.get(0);
+                    int result = decimalNumbers[0];
 
                     // Perform the selected arithmetic operation on multiple numbers
-                    for (int i = 1; i < decimalNumbers.size(); i++) {
+                    for (int i = 1; i < count; i++) {
                         switch (operation) {
                             case 1:
-                                result += decimalNumbers.get(i);
+                                result += decimalNumbers[i];
                                 break;
                             case 2:
-                                result -= decimalNumbers.get(i);
+                                result -= decimalNumbers[i];
                                 break;
                             default:
-                                System.out.println("Invalid operation. Please select 1 or 2.");
+                                System.out.println(Constants.ArthemticInvalidOption);
                                 continue;
                         }
                     }
-
                     // Notify the user if the result is negative
                     if (result < 0) {
                         System.out.println("The result is negative: " + result + ". Please enter valid numbers or check your operation.");
@@ -219,11 +175,7 @@ public class Week4_Assignment1 {
                     }
 
                     // Ask the user for the desired conversion of the result
-                    System.out.println("Convert the result to:");
-                    System.out.println("1. Decimal");
-                    System.out.println("2. Binary");
-                    System.out.println("3. Octal");
-                    System.out.println("4. Hexadecimal");
+                    System.out.println(Constants.ArthemticOperationIndex);
                     int conversionChoice = scanner.nextInt();
 
                     // Convert the result as per the user's choice
@@ -232,34 +184,29 @@ public class Week4_Assignment1 {
                             System.out.println("Result in decimal: " + result);
                             break;
                         case 2:
-                            System.out.println("Result in binary: " + decimalToBinary(result));
+                            System.out.println("Result in binary: " + methodConstant.decimalToBinary(result));
                             break;
                         case 3:
-                            System.out.println("Result in octal: " + decimalToOctal(result));
+                            System.out.println("Result in octal: " + methodConstant.decimalToOctal(result));
                             break;
                         case 4:
-                            System.out.println("Result in hexadecimal: " + decimalToHexadecimal(result));
+                            System.out.println("Result in hexadecimal: " + methodConstant.decimalToHexadecimal(result));
                             break;
                         default:
                             System.out.println("Invalid conversion choice.");
                     }
-
                 } else {
-                    System.out.println("Invalid action. Please choose 1 or 2.");
+                    System.out.println(Constants.ArthemticInvalidOption);
                 }
-
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid number format. Please enter a valid number.");
             } catch (Exception e) {
                 System.out.println("An error occurred: " + e.getMessage());
+                scanner.nextLine(); // Clear the scanner buffer
             }
 
             // Ask the user if they want to run the program again
-            System.out.println("Do you want to perform another operation? (y/n)");
+            System.out.println(Constants.RunAgain);
             runAgain = scanner.next();
         }
-
-        System.out.println("Program exited.");
         scanner.close();
     }
 }
